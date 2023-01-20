@@ -1,0 +1,23 @@
+.body {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    height: 100vh;
+}
+
+.editor-container {
+    width: 100%;
+    height: 100%;
+}
+
+.editor-container--computing {
+    filter: blur(2px);
+}
+
+.jsoneditor-menu>button.jsoneditor-update {
+    background-position: -72px -72px;
+}
+
+.jsoneditor-menu>a.jsoneditor-download {
+    background-position: -144px -72px;
+}

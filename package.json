@@ -1,0 +1,17 @@
+{
+  "name": "whitelist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/js/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "jsoneditor": "^9.9.0",
+    "starknet": "^3.18.2"
+  }
+}
