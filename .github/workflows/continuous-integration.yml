@@ -52,7 +52,7 @@ jobs:
       # Build the front-end if there is no matching cache
       - name: Build the front-end app
         if: steps.build-cache.outputs.cache-hit != true
-        run: npm build
+        run: npm run build
 
   code-style:
     name: Code Style
@@ -94,4 +94,4 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
       # Runs the npm tests
       - name: Npm test
-        run: npm test
+        run: npm run test
