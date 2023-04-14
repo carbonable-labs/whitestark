@@ -1,5 +1,6 @@
 import { JSONEditor } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
+import { whitelist } from "./merkletree/whitelist";
 
 export default function SvelteJSONEditor(props) {
   const refContainer = useRef(null);
@@ -29,9 +30,40 @@ export default function SvelteJSONEditor(props) {
       console.log("update props", props);
       refEditor.current.updateProps(props);
     }
+
+    update();
   }, [props]);
 
   const right = document.getElementById("jsoneditor-right");
+
+  const backend = whitelist;
+
+  const update = async function () {
+    try {
+      right.classList.add("editor-container--computing");
+      // eslint-disable-next-line react/prop-types
+      let data = backend.run(props.innitialJson.json);
+
+      const newData = {
+        text: undefined,
+        json: data,
+      };
+      refEditor.current.set(newData);
+      right.classList.remove("editor-container--computing");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // compute button
+  const buttonUpdate = document.createElement("button");
+  buttonUpdate.type = "button";
+  buttonUpdate.className = "jse-update";
+  buttonUpdate.title = "Update";
+  buttonUpdate.textContent = "Update";
+  buttonUpdate.onclick = function () {
+    update();
+  };
 
   const download = function () {
     const json = JSON.stringify(refEditor.current.get(), null, 4);
@@ -56,7 +88,9 @@ export default function SvelteJSONEditor(props) {
   useEffect(() => {
     if (right) {
       const jsonEditorMenu = right.querySelector(".jse-menu");
+      jsonEditorMenu.appendChild(buttonUpdate);
       jsonEditorMenu.appendChild(buttonDownload);
+      console.log("add btn");
     }
   }, [right]);
 

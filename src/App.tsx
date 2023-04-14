@@ -1,6 +1,6 @@
 import VanillaJSONEditor from "./VanillaJSONEditor";
 import VanillaJSONViewer from "./VanillaJSONViewer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./styles.css";
 import "./vanillaJse.css";
 
@@ -26,24 +26,16 @@ export default function App() {
 
   const readOnly = true;
 
-  useEffect(() => {
-    setViewerJson(initialJson);
-  }, [initialJson]);
-
   return (
     <div className="hompe--page">
       <div className="editor-container" id="jsoneditor-left">
-        <VanillaJSONEditor
-          mode="text"
-          content={initialJson}
-          onChange={setInitialJson}
-        />
+        <VanillaJSONEditor content={initialJson} onChange={setInitialJson} />
       </div>
 
       <div className="editor-container" id="jsoneditor-right">
         <VanillaJSONViewer
-          mode="true"
           content={viewerJson}
+          innitialJson={initialJson}
           onChange={setViewerJson}
           readOnly={readOnly}
         />

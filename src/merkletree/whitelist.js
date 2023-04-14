@@ -1,7 +1,7 @@
 const merkletree = require("./merkletree");
 const fs = require("fs");
 
-const whitelist = {
+export const whitelist = {
   assert(condition, message) {
     if (!condition) {
       throw new Error(message || "Verification failed");
@@ -46,5 +46,3 @@ const whitelist = {
     return { root: root, leaves: leaves };
   },
 };
-
-module.exports = whitelist;
