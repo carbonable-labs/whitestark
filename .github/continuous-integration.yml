@@ -1,0 +1,97 @@
+name: CI
+
+# target branches for the ci workflow
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  # Installs the project
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the source code
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      # Cache npm dependencies
+      - name: Cache node dependencies
+        uses: actions/cache@v3
+        id: node-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      # Install node dependencies if there is no matching cache
+      - name: Install node dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm install
+
+  build:
+    name: Build
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the source code
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      # Load the node dependencies from cache
+      - name: Load node dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      # Cache the front-end build
+      - name: Cache front-end build
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: public/build
+          key: ${{ runner.os }}-build-${{ hashFiles('resources/js/**/*', 'package-lock.json') }}
+      # Build the front-end if there is no matching cache
+      - name: Build the front-end app
+        if: steps.build-cache.outputs.cache-hit != true
+        run: npm build
+
+  code-style:
+    name: Code Style
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the source code
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      # Load the node dependencies from cache
+      - name: Load node dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      # Check the code style with eslint
+      - name: Eslint
+        run: npm run lint:eslint
+      # Check the code formatting with eslint
+      - name: Prettier
+        run: npm run lint:prettier
+      # Check the css style with stylelint
+      - name: Stylelint
+        run: npm run lint:stylelint
+
+  test:
+    name: Test
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the source code
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      # Load the node dependencies from cache
+      - name: Load node dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      # Runs the npm tests
+      - name: Npm test
+        run: npm test

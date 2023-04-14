@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Whitestark</h1>
-    <img src="docs/images/whitestark.png" height="200">
+    <img src="public/whitestark.png" height="200">
   <br />
 </div>
 
@@ -8,7 +8,7 @@
 
 ## About
 
-> Whitestark is a solution to generate whitelists for StarkNet purpose 
+> Whitestark is a solution to generate whitelists for StarkNet purpose
 
 ## Security
 
