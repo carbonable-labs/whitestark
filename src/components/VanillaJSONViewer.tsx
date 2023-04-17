@@ -1,4 +1,4 @@
-import { JSONEditor } from "vanilla-jsoneditor";
+import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
 import { whitelist } from "../merkletree/whitelist";
 
@@ -32,6 +32,8 @@ export default function SvelteJSONEditor(props: any) {
     }
 
     update();
+
+    addDownloadButton();
   }, [props]);
 
   const right = document.getElementById("jsoneditor-right");
@@ -78,15 +80,13 @@ export default function SvelteJSONEditor(props: any) {
   });
 
   // add buttons to menu
-  useEffect(() => {
+  function addDownloadButton() {
     setTimeout(() => {
-      if (right) {
-        const jsonEditorMenu = right.querySelector(".jse-menu");
-        const jsonMenuSearch = jsonEditorMenu?.querySelector(".jse-search");
-        jsonMenuSearch?.after(buttonDownload);
-      }
+      const jsonEditorMenu = right?.querySelector(".jse-menu");
+      const jsonMenuSearch = jsonEditorMenu?.querySelector(".jse-search");
+      jsonMenuSearch?.after(buttonDownload);
     }, 1);
-  }, [right, props]);
+  }
 
   return (
     <div
