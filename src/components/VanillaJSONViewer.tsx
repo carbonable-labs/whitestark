@@ -1,10 +1,10 @@
 import { JSONEditor } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
-import { whitelist } from "./merkletree/whitelist";
+import { whitelist } from "../merkletree/whitelist";
 
-export default function SvelteJSONEditor(props) {
-  const refContainer = useRef(null);
-  const refEditor = useRef(null);
+export default function SvelteJSONEditor(props: any) {
+  const refContainer = useRef<any>(null);
+  const refEditor = useRef<any>(null);
 
   useEffect(() => {
     // create editor
@@ -40,33 +40,33 @@ export default function SvelteJSONEditor(props) {
 
   const update = async function () {
     try {
-      right.classList.add("editor-container--computing");
+      right?.classList.add("editor-container--computing");
       // eslint-disable-next-line react/prop-types
-      let jsonObject = props.innitialJson.json
+      const jsonObject = props.innitialJson.json
         ? props.innitialJson.json
         : JSON.parse(props.innitialJson.text);
-      let data = backend.run(jsonObject);
+      const data = backend.run(jsonObject);
 
       const newData = {
         text: undefined,
         json: data,
       };
       refEditor.current.set(newData);
-      right.classList.remove("editor-container--computing");
+      right?.classList.remove("editor-container--computing");
     } catch (error) {
       console.log(error);
     }
   };
 
   const download = function () {
-    const json = JSON.stringify(refEditor.current.get(), null, 4);
+    const json = JSON.stringify(refEditor.current.get().json, null, 4);
     const data = new Blob([json], { type: "text/plain" });
     return window.URL.createObjectURL(data);
   };
 
   // download button
   const buttonDownload = document.createElement("a");
-  buttonDownload.className = "jse-download";
+  buttonDownload.className = "jse-button jse-download";
   buttonDownload.title = "Download";
   buttonDownload.textContent = "Download";
   buttonDownload.addEventListener("click", function () {
@@ -82,8 +82,8 @@ export default function SvelteJSONEditor(props) {
     setTimeout(() => {
       if (right) {
         const jsonEditorMenu = right.querySelector(".jse-menu");
-        const jsonMenuSearch = jsonEditorMenu.querySelector(".jse-search");
-        jsonMenuSearch.after(buttonDownload);
+        const jsonMenuSearch = jsonEditorMenu?.querySelector(".jse-search");
+        jsonMenuSearch?.after(buttonDownload);
       }
     }, 1);
   }, [right, props]);

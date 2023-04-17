@@ -23,5 +23,5 @@ module.exports = {
       customSyntax: "postcss-scss",
     },
   ],
-  ignoreFiles: ["src/vanillaJse.css", "public/index.html"],
+  ignoreFiles: ["src/styles/vanillaJse.css", "public/index.html"],
 };

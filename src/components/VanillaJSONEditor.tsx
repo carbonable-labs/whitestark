@@ -1,9 +1,9 @@
 import { JSONEditor } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
 
-export default function SvelteJSONEditor(props) {
-  const refContainer = useRef(null);
-  const refEditor = useRef(null);
+export default function SvelteJSONEditor(props: any) {
+  const refContainer = useRef<any>(null);
+  const refEditor = useRef<any>(null);
 
   useEffect(() => {
     // create editor

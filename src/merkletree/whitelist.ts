@@ -1,8 +1,10 @@
-const merkletree = require("./merkletree");
-const fs = require("fs");
+import {merkletree} from "./merkletree";
+// const fs = require("fs");
+import {dataType, leaveType} from "./types";
+
 
 export const whitelist = {
-  assert(condition, message) {
+  assert(condition: boolean, message?: string) {
     if (!condition) {
       throw new Error(message || "Verification failed");
     }
@@ -19,24 +21,24 @@ export const whitelist = {
         }
     },*/
 
-  write(obj, path) {
-    const json = JSON.stringify(obj, null, 4);
-    fs.writeFile(path, json, "utf8", (err) => {
-      if (err) throw err;
-      console.log("complete");
-    });
-  },
+  // write(obj, path) {
+  //   const json = JSON.stringify(obj, null, 4);
+  //   fs.writeFile(path, json, "utf8", (err) => {
+  //     if (err) throw err;
+  //     console.log("complete");
+  //   });
+  // },
 
-  run(data) {
+  run(data : dataType) {
     const leaves = merkletree.getLeaves(data);
-    const root = merkletree.generateMerkleRoot(leaves.map((item) => item.leaf));
+    const root = merkletree.generateMerkleRoot(leaves.map((item : leaveType) => item.leaf));
     if (leaves[leaves.length - 1].leaf === 0) {
       leaves.pop();
     }
     for (const [index, item] of leaves.entries()) {
       item.index = index;
       item.proof = merkletree.generateMerkleProof(
-        leaves.map((element) => element.leaf),
+        leaves.map((element: leaveType) => element.leaf),
         index
       );
       whitelist.assert(

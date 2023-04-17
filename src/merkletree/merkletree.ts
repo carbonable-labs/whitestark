@@ -2,9 +2,11 @@
 
 const starknet = require("starknet");
 
-const merkletree = {
-  getNextLevel(level) {
-    nextLevel = [];
+import {dataType} from "./types";
+
+export const merkletree = {
+  getNextLevel(level: (string | number)[]) {
+    let nextLevel = [];
     for (let i = 0; i < level.length; i += 2) {
       let node;
       if (Number(level[i]) <= Number(level[i + 1])) {
@@ -17,7 +19,7 @@ const merkletree = {
     return nextLevel;
   },
 
-  generateProofHelper(level, index, proof) {
+  generateProofHelper(level: (string | number)[], index: number, proof: (string | number)[]) : (string | number)[] {
     if (level.length === 1) {
       return proof;
     }
@@ -25,7 +27,7 @@ const merkletree = {
       level.push(0);
     }
 
-    let indexParent;
+    let indexParent = 0;
     for (let i = 0; i < level.length; i++) {
       if (i === index) {
         indexParent = Math.floor(i / 2);
@@ -41,22 +43,22 @@ const merkletree = {
     return this.generateProofHelper(nextLevel, indexParent, proof);
   },
 
-  generateMerkleProof(values, index) {
+  generateMerkleProof(values: (string | number)[], index: number) {
     return this.generateProofHelper(values, index, []);
   },
 
-  generateMerkleRoot(values) {
+  generateMerkleRoot(values: (string | number)[]) : string | number{
     if (values.length === 1) {
       return values[0];
     }
     if (values.length % 2) {
       values.push(0);
     }
-    nextLevel = this.getNextLevel(values);
+    const nextLevel = this.getNextLevel(values);
     return this.generateMerkleRoot(nextLevel);
   },
 
-  verifyMerkleProof(leaf, proof, root) {
+  verifyMerkleProof(leaf: string, proof: (string | number)[], root: string | number) {
     let curr = leaf;
 
     for (const proof_elem of proof) {
@@ -70,21 +72,23 @@ const merkletree = {
     return curr === root;
   },
 
-  getLeaf(address, allocation) {
+  getLeaf(address : string, allocation: number) {
     return this.hashFn([address, allocation]);
   },
 
-  getLeaves(data) {
-    values = [];
+  getLeaves(data : dataType) {
+    let values = [];
     for (const row of data) {
       const address = this.hexToBn(row.address);
-      leaf = this.getLeaf(address, row.allocation);
+      const leaf = this.getLeaf(address, row.allocation);
 
       values.push({
         leaf: leaf,
         address_bn: address,
         address: row.address,
         allocation: row.allocation,
+        index: 0,
+        proof: [0, ""]
       });
     }
 
@@ -94,20 +98,20 @@ const merkletree = {
         address_bn: 0,
         address: 0,
         allocation: 0,
+        index: 0,
+        proof: [0, ""]
       });
     }
 
     return values;
   },
 
-  hexToBn(hex) {
+  hexToBn(hex: string) {
     const bn = starknet.number.toBN(hex.replace("0x", ""), 16);
     return bn.toString();
   },
 
-  hashFn(inputs) {
+  hashFn(inputs : [any, any]) {
     return this.hexToBn(starknet.hash.pedersen(inputs));
   },
 };
-
-module.exports = merkletree;
