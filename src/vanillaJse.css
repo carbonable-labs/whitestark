@@ -7,14 +7,15 @@
   display: none;
 }
 
+.editor-container {
+  width: 100%;
+}
+
 .editor-container--computing {
   filter: blur(2px);
 }
 
-.jse-menu > button.jse-update {
-  background-position: -72px -72px;
-}
-
 .jse-menu > a.jse-download {
-  background-position: -144px -72px;
+  margin-left: 15px;
+  cursor: pointer;
 }

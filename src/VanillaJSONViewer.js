@@ -42,7 +42,10 @@ export default function SvelteJSONEditor(props) {
     try {
       right.classList.add("editor-container--computing");
       // eslint-disable-next-line react/prop-types
-      let data = backend.run(props.innitialJson.json);
+      let jsonObject = props.innitialJson.json
+        ? props.innitialJson.json
+        : JSON.parse(props.innitialJson.text);
+      let data = backend.run(jsonObject);
 
       const newData = {
         text: undefined,
@@ -53,16 +56,6 @@ export default function SvelteJSONEditor(props) {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  // compute button
-  const buttonUpdate = document.createElement("button");
-  buttonUpdate.type = "button";
-  buttonUpdate.className = "jse-update";
-  buttonUpdate.title = "Update";
-  buttonUpdate.textContent = "Update";
-  buttonUpdate.onclick = function () {
-    update();
   };
 
   const download = function () {
@@ -86,13 +79,14 @@ export default function SvelteJSONEditor(props) {
 
   // add buttons to menu
   useEffect(() => {
-    if (right) {
-      const jsonEditorMenu = right.querySelector(".jse-menu");
-      jsonEditorMenu.appendChild(buttonUpdate);
-      jsonEditorMenu.appendChild(buttonDownload);
-      console.log("add btn");
-    }
-  }, [right]);
+    setTimeout(() => {
+      if (right) {
+        const jsonEditorMenu = right.querySelector(".jse-menu");
+        const jsonMenuSearch = jsonEditorMenu.querySelector(".jse-search");
+        jsonMenuSearch.after(buttonDownload);
+      }
+    }, 1);
+  }, [right, props]);
 
   return (
     <div

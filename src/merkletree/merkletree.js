@@ -70,21 +70,21 @@ const merkletree = {
     return curr === root;
   },
 
-  getLeaf(address, quantity) {
-    return this.hashFn([address, quantity]);
+  getLeaf(address, allocation) {
+    return this.hashFn([address, allocation]);
   },
 
   getLeaves(data) {
     values = [];
     for (const row of data) {
       const address = this.hexToBn(row.address);
-      leaf = this.getLeaf(address, row.quantity);
+      leaf = this.getLeaf(address, row.allocation);
 
       values.push({
         leaf: leaf,
         address_bn: address,
         address: row.address,
-        quantity: row.quantity,
+        allocation: row.allocation,
       });
     }
 
@@ -93,7 +93,7 @@ const merkletree = {
         leaf: 0,
         address_bn: 0,
         address: 0,
-        quantity: 0,
+        allocation: 0,
       });
     }
 

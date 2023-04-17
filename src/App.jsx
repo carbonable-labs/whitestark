@@ -10,12 +10,12 @@ export default function App() {
       {
         address:
           "0x208555013ffe57ce0f78be91ce8b368eba6645a52bb90fed2c427617d619d03",
-        quantity: 5,
+        allocation: 5,
       },
       {
         address:
           "0x009d02bAA050B9e8F3eb98fF0FA1eDe8e1b20D65CEae9f05E018b4d8dA3E4b7f",
-        quantity: 1,
+        allocation: 1,
       },
     ],
 
@@ -29,7 +29,11 @@ export default function App() {
   return (
     <div className="hompe--page">
       <div className="editor-container" id="jsoneditor-left">
-        <VanillaJSONEditor content={initialJson} onChange={setInitialJson} />
+        <VanillaJSONEditor
+          mode="text"
+          content={initialJson}
+          onChange={setInitialJson}
+        />
       </div>
 
       <div className="editor-container" id="jsoneditor-right">
