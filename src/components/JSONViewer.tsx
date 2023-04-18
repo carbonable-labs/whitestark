@@ -2,13 +2,16 @@ import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
 import { whitelist } from "../merkletree/whitelist";
 
-export default function SvelteJSONEditor(props: any) {
+interface propsType extends JSONEditorPropsOptional {
+  initialJson: any;
+}
+
+export default function SvelteJSONEditor(props: propsType) {
   const refContainer = useRef<any>(null);
-  const refEditor = useRef<any>(null);
+  const refEditor = useRef<JSONEditor | null>(null);
 
   useEffect(() => {
     // create editor
-    console.log("create editor", refContainer.current);
     refEditor.current = new JSONEditor({
       target: refContainer.current,
       props: {},
@@ -17,7 +20,6 @@ export default function SvelteJSONEditor(props: any) {
     return () => {
       // destroy editor
       if (refEditor.current) {
-        console.log("destroy editor");
         refEditor.current.destroy();
         refEditor.current = null;
       }
@@ -27,7 +29,6 @@ export default function SvelteJSONEditor(props: any) {
   // update props
   useEffect(() => {
     if (refEditor.current) {
-      console.log("update props", props);
       refEditor.current.updateProps(props);
     }
 
@@ -42,18 +43,16 @@ export default function SvelteJSONEditor(props: any) {
 
   const update = async function () {
     try {
-      right?.classList.add("editor-container--computing");
+      right?.classList.add("editor-container-computing");
       // eslint-disable-next-line react/prop-types
-      const jsonObject = props.innitialJson.json
-        ? props.innitialJson.json
-        : JSON.parse(props.innitialJson.text);
+      const jsonObject = JSON.parse(props.initialJson.text);
       const data = backend.run(jsonObject);
 
       const newData = {
         text: undefined,
         json: data,
       };
-      refEditor.current.set(newData);
+      refEditor.current?.set(newData);
       right?.classList.remove("editor-container--computing");
     } catch (error) {
       console.log(error);
@@ -61,7 +60,7 @@ export default function SvelteJSONEditor(props: any) {
   };
 
   const download = function () {
-    const json = JSON.stringify(refEditor.current.get().json, null, 4);
+    const json = JSON.stringify(refEditor.current?.get(), null, 4);
     const data = new Blob([json], { type: "text/plain" });
     return window.URL.createObjectURL(data);
   };
@@ -72,9 +71,7 @@ export default function SvelteJSONEditor(props: any) {
   buttonDownload.title = "Download";
   buttonDownload.textContent = "Download";
   buttonDownload.addEventListener("click", function () {
-    console.log("dl");
     const link = download();
-    console.log(link);
     buttonDownload.setAttribute("download", "output.json");
     buttonDownload.href = link;
   });

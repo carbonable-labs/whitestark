@@ -5,7 +5,7 @@ export type leaveType = {
     address: string | number,
     allocation: number,
     index: number,
-    proof: any
+    proof: (string | number) []
 }
   
 export type dataItem = {

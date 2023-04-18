@@ -1,5 +1,4 @@
 import {merkletree} from "./merkletree";
-// const fs = require("fs");
 import {dataType, leaveType} from "./types";
 
 
@@ -9,25 +8,6 @@ export const whitelist = {
       throw new Error(message || "Verification failed");
     }
   },
-
-  /*read(path) {
-        try {
-            const data = fs.readFileSync(path, 'utf8');
-            const json = JSON.parse(data);
-            return json;
-        } catch (err) {
-            console.error(err);
-            return;
-        }
-    },*/
-
-  // write(obj, path) {
-  //   const json = JSON.stringify(obj, null, 4);
-  //   fs.writeFile(path, json, "utf8", (err) => {
-  //     if (err) throw err;
-  //     console.log("complete");
-  //   });
-  // },
 
   run(data : dataType) {
     const leaves = merkletree.getLeaves(data);

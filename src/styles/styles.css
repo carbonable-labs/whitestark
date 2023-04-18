@@ -2,8 +2,30 @@ body {
   margin: 0;
 }
 
-.hompe--page {
+.hompe-page {
   display: flex;
   justify-content: center;
   height: 100vh;
+}
+
+.vanilla-jsoneditor-react {
+  width: 100%;
+  height: 100%;
+}
+
+.jse-group-button {
+  display: none;
+}
+
+.editor-container {
+  width: 100%;
+}
+
+.editor-container-computing {
+  filter: blur(2px);
+}
+
+.jse-menu > a.jse-download {
+  cursor: pointer;
+  margin-left: 15px;
 }

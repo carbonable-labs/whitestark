@@ -1,6 +1,0 @@
-[project]
-protostar-version = "0.9.3"
-lib-path = "lib"
-
-[contracts]
-merkle = ["src/merkle.cairo"]

@@ -1,28 +1,24 @@
-import VanillaJSONEditor from "./components/VanillaJSONEditor";
-import VanillaJSONViewer from "./components/VanillaJSONViewer";
+import JSONEditor from "./components/JSONEditor";
+import JSONViewer from "./components/JSONViewer";
 
-import { Mode } from "vanilla-jsoneditor";
+import { Mode, Content } from "vanilla-jsoneditor";
 
 import { useState } from "react";
 import "./styles/styles.css";
-import "./styles/vanillaJse.css";
 
 export default function App() {
-  const [initialJson, setInitialJson] = useState({
-    json: [
+  const [initialJson, setInitialJson] = useState<Content>({
+    text: `
+    [
       {
-        address:
-          "0x208555013ffe57ce0f78be91ce8b368eba6645a52bb90fed2c427617d619d03",
-        allocation: 5,
+        "address": "0x208555013ffe57ce0f78be91ce8b368eba6645a52bb90fed2c427617d619d03",
+        "allocation": 5
       },
       {
-        address:
-          "0x009d02bAA050B9e8F3eb98fF0FA1eDe8e1b20D65CEae9f05E018b4d8dA3E4b7f",
-        allocation: 1,
-      },
-    ],
-
-    text: undefined,
+        "address": "0x009d02bAA050B9e8F3eb98fF0FA1eDe8e1b20D65CEae9f05E018b4d8dA3E4b7f",
+        "allocation": 1
+      }
+    ]`,
   });
 
   const [viewerJson, setViewerJson] = useState(initialJson);
@@ -30,9 +26,9 @@ export default function App() {
   const readOnly = true;
 
   return (
-    <div className="hompe--page">
+    <div className="hompe-page">
       <div className="editor-container" id="jsoneditor-left">
-        <VanillaJSONEditor
+        <JSONEditor
           mode={Mode.text}
           content={initialJson}
           onChange={setInitialJson}
@@ -40,9 +36,9 @@ export default function App() {
       </div>
 
       <div className="editor-container" id="jsoneditor-right">
-        <VanillaJSONViewer
+        <JSONViewer
           content={viewerJson}
-          innitialJson={initialJson}
+          initialJson={initialJson}
           onChange={setViewerJson}
           readOnly={readOnly}
         />
