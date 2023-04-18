@@ -4,7 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math_cmp import is_le_felt
 
-# verifies a merkle proof
+// verifies a merkle proof
 func merkle_verify{
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
@@ -13,17 +13,17 @@ func merkle_verify{
         root: felt,
         proof_len: felt,
         proof: felt*
-    ) -> (res: felt):
-    let (calc_root) = calc_merkle_root(leaf, proof_len, proof)
-    # check if calculated root is equal to expected
-    if calc_root == root:
-        return (1)
-    else:
-        return (0)
-    end
-end
+    ) -> (res: felt){
+    let (calc_root) = calc_merkle_root(leaf, proof_len, proof);
+    // check if calculated root is equal to expected
+    if (calc_root == root){
+        return (res = 1);
+    }else{
+        return (res = 0);
+    }
+}
 
-# calculates the merkle root of a given proof
+// calculates the merkle root of a given proof
 func calc_merkle_root{
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
@@ -31,45 +31,45 @@ func calc_merkle_root{
         curr: felt,
         proof_len: felt,
         proof: felt*
-    ) -> (res: felt):
-    alloc_locals
+    ) -> (res: felt){
+    alloc_locals;
 
-    if proof_len == 0:
-        return (curr)
-    end
+    if (proof_len == 0){
+        return (res = curr);
+    }
 
-    local node
-    local proof_elem = [proof]
-    let (le) = is_le_felt(curr, proof_elem)
+    local node;
+    local proof_elem = [proof];
+    let le = is_le_felt(curr, proof_elem);
     
-    if le == 1:
-        let (n) = hash2{hash_ptr=pedersen_ptr}(curr, proof_elem)
-        node = n
-    else:
-        let (n) = hash2{hash_ptr=pedersen_ptr}(proof_elem, curr)
-        node = n
-    end
+    if (le == 1){
+        let (n) = hash2{hash_ptr=pedersen_ptr}(curr, proof_elem);
+        node = n;
+    }else{
+        let (n) = hash2{hash_ptr=pedersen_ptr}(proof_elem, curr);
+        node = n;
+    }
 
-    let (res) = calc_merkle_root(node, proof_len-1, proof+1)
-    return (res)
-end
+    let (res) = calc_merkle_root(node, proof_len-1, proof+1);
+    return (res = res);
+}
 
-# calculates the merkle root of a given proof
+// calculates the merkle root of a given proof
 func extract_slots{
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
-    }(leaf : felt, account : felt, guess : felt, limit : felt) -> (slots : felt):
-    alloc_locals
+    }(leaf : felt, account : felt, guess : felt, limit : felt) -> (slots : felt){
+    alloc_locals;
 
-    if guess == limit:
-        return (slots=0)
-    end
+    if (guess == limit){
+        return (slots=0);
+    }
 
-    let (returned_leaf) = hash2{hash_ptr=pedersen_ptr}(account, guess)
+    let (returned_leaf) = hash2{hash_ptr=pedersen_ptr}(account, guess);
 
-    if returned_leaf == leaf:
-        return (slots=guess)
-    end
+    if (returned_leaf == leaf){
+        return (slots=guess);
+    }
 
-    return extract_slots(leaf, account, guess=guess + 1, limit=limit)
-end
+    return extract_slots(leaf, account, guess=guess + 1, limit=limit);
+}

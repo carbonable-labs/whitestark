@@ -1,10 +1,6 @@
-["protostar.config"]
-protostar_version = "0.3.0"
+[project]
+protostar-version = "0.9.3"
+lib-path = "lib"
 
-["protostar.project"]
-libs_path = "lib"
-
-["protostar.contracts"]
-main = [
-    "src/main.cairo",
-]
+[contracts]
+merkle = ["src/merkle.cairo"]
