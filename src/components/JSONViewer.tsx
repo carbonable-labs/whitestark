@@ -53,7 +53,7 @@ export default function SvelteJSONEditor(props: propsType) {
         json: data,
       };
       refEditor.current?.set(newData);
-      right?.classList.remove("editor-container--computing");
+      right?.classList.remove("editor-container-computing");
     } catch (error) {
       console.log(error);
     }
