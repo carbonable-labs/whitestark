@@ -94,4 +94,4 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
       # Runs the npm tests
       - name: Npm test
-        run: npm run test
+        run: npm run test:ci

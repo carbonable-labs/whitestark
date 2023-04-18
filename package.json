@@ -8,6 +8,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test:protostar": "protostar test",
+    "test:ci": "npm run test && npm run test:protostar",
     "prepare": "husky install",
     "lint:eslint": "eslint --ext \".js,.ts\" --ignore-path .gitignore .",
     "lint:prettier": "prettier --check .",
