@@ -1,13 +1,21 @@
-import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
+import { JSONContent, JSONEditor } from "vanilla-jsoneditor";
 import { useEffect, useRef, useCallback } from "react";
+import { Grant } from "../Types";
+
 import { whitelist } from "../merkletree/whitelist";
 const downloadButton = require("../images/download.png");
 
-interface propsType extends JSONEditorPropsOptional {
-  initialJson: any;
+interface Props {
+  value: Grant[];
 }
 
-export default function SvelteJSONEditor(props: propsType) {
+/**
+ * It is a React implementation of the vanilla-jsoneditor library.
+ *
+ * @see https://codesandbox.io/s/svelte-jsoneditor-react-59wxz  The official example of how using lib with React
+ */
+
+export default function JsonViewer(props: Props) {
   const refContainer = useRef<any>(null);
   const refEditor = useRef<JSONEditor | null>(null);
 
@@ -33,34 +41,44 @@ export default function SvelteJSONEditor(props: propsType) {
 
   const update = useCallback(async () => {
     try {
+      console.log(right);
       right?.classList.add("editor-container-computing");
-      const jsonObject = JSON.parse(props.initialJson.text);
+      const jsonObject = props.value;
       const data = await backend.run(jsonObject);
 
       const newData = {
         text: undefined,
         json: data,
       };
-      refEditor.current?.set(newData);
-      right?.classList.remove("editor-container-computing");
+      refEditor.current?.update(newData);
 
-      addDownloadButton();
+      right?.classList.remove("editor-container-computing");
     } catch (error) {
       console.log(error);
     }
-  }, [props.initialJson]);
+  }, [props.value]);
 
   // update props
   useEffect(() => {
     if (refEditor.current) {
-      refEditor.current.updateProps(props);
+      refEditor.current.updateProps({
+        readOnly: true,
+      });
     }
 
     update();
-  }, [update]);
+  }, [props]);
+
+  useEffect(() => {
+    addDownloadButton();
+  }, []);
 
   const download = function () {
-    const json = JSON.stringify(refEditor.current?.get(), null, 4);
+    const json = JSON.stringify(
+      (refEditor.current?.get() as JSONContent).json,
+      null,
+      4
+    );
     const data = new Blob([json], { type: "text/plain" });
     return window.URL.createObjectURL(data);
   };
@@ -78,6 +96,7 @@ export default function SvelteJSONEditor(props: propsType) {
 
   // add buttons to menu
   function addDownloadButton() {
+    console.log("add btn");
     setTimeout(() => {
       const jsonEditorMenu = document.querySelectorAll(".jse-menu")[1];
       const jsonMenuSearch = jsonEditorMenu?.querySelector(".jse-search");
@@ -85,10 +104,5 @@ export default function SvelteJSONEditor(props: propsType) {
     }, 1);
   }
 
-  return (
-    <div
-      className="vanilla-jsoneditor-react jsoneditor-right"
-      ref={refContainer}
-    ></div>
-  );
+  return <div className="vanilla-jsoneditor-react" ref={refContainer}></div>;
 }

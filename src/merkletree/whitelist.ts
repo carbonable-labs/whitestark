@@ -1,5 +1,5 @@
 import { merkletree } from "./merkletree";
-import { dataType, leaveType } from "./types";
+import { dataType, leaveType } from "../Types";
 
 export const whitelist = {
   assert(condition: boolean, message?: string) {

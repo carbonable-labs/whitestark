@@ -2,7 +2,7 @@
 
 const starknet = require("starknet");
 
-import {dataType} from "./types";
+import {dataType} from "../Types";
 
 export const merkletree = {
  async getNextLevel(level: (string | number)[]) {

@@ -1,5 +1,5 @@
 import { whitelist } from "../whitelist";
-import { dataType } from "../types";
+import { dataType } from "../../Types";
 
 describe("Whitelist", () => {
 
