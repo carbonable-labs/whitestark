@@ -1,5 +1,5 @@
-import JsonEditor from "./components/JsonEditor";
-import JsonViewer from "./components/JsonViewer";
+import JsonEditor from "./components/JSONEditor";
+import JsonViewer from "./components/JSONViewer";
 import { Grant } from "./Types";
 
 import { useState } from "react";
