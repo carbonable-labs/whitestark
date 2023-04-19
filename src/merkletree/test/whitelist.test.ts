@@ -4,7 +4,7 @@ import { dataType } from "../types";
 describe("Whitelist", () => {
 
     describe("run()", () => {
-        it("should generate merkle tree with correct root and proofs", () => {
+        it("should generate merkle tree with correct root and proofs", async() => {
         const data: dataType =  [
             {
             address:
@@ -18,7 +18,7 @@ describe("Whitelist", () => {
             },
         ];
 
-        const result = whitelist.run(data);
+        const result = await whitelist.run(data);
 
         expect(result.root).toEqual(
             "3360113208160104531126311151413775021287568672669734343931496313109553562643"

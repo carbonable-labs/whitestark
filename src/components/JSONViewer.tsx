@@ -1,6 +1,7 @@
 import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { whitelist } from "../merkletree/whitelist";
+const downloadButton = require("../images/download.png");
 
 interface propsType extends JSONEditorPropsOptional {
   initialJson: any;
@@ -26,27 +27,15 @@ export default function SvelteJSONEditor(props: propsType) {
     };
   }, []);
 
-  // update props
-  useEffect(() => {
-    if (refEditor.current) {
-      refEditor.current.updateProps(props);
-    }
-
-    update();
-
-    addDownloadButton();
-  }, [props]);
-
   const right = document.getElementById("jsoneditor-right");
 
   const backend = whitelist;
 
-  const update = async function () {
+  const update = useCallback(async () => {
     try {
       right?.classList.add("editor-container-computing");
-      // eslint-disable-next-line react/prop-types
       const jsonObject = JSON.parse(props.initialJson.text);
-      const data = backend.run(jsonObject);
+      const data = await backend.run(jsonObject);
 
       const newData = {
         text: undefined,
@@ -54,10 +43,21 @@ export default function SvelteJSONEditor(props: propsType) {
       };
       refEditor.current?.set(newData);
       right?.classList.remove("editor-container-computing");
+
+      addDownloadButton();
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [props.initialJson]);
+
+  // update props
+  useEffect(() => {
+    if (refEditor.current) {
+      refEditor.current.updateProps(props);
+    }
+
+    update();
+  }, [update]);
 
   const download = function () {
     const json = JSON.stringify(refEditor.current?.get(), null, 4);
@@ -69,7 +69,7 @@ export default function SvelteJSONEditor(props: propsType) {
   const buttonDownload = document.createElement("a");
   buttonDownload.className = "jse-button jse-download";
   buttonDownload.title = "Download";
-  buttonDownload.textContent = "Download";
+  buttonDownload.innerHTML = `<img src="${downloadButton}" alt="download" />`;
   buttonDownload.addEventListener("click", function () {
     const link = download();
     buttonDownload.setAttribute("download", "output.json");
@@ -79,7 +79,7 @@ export default function SvelteJSONEditor(props: propsType) {
   // add buttons to menu
   function addDownloadButton() {
     setTimeout(() => {
-      const jsonEditorMenu = right?.querySelector(".jse-menu");
+      const jsonEditorMenu = document.querySelectorAll(".jse-menu")[1];
       const jsonMenuSearch = jsonEditorMenu?.querySelector(".jse-search");
       jsonMenuSearch?.after(buttonDownload);
     }, 1);

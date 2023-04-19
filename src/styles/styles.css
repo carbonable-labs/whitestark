@@ -27,5 +27,15 @@ body {
 
 .jse-menu > a.jse-download {
   cursor: pointer;
-  margin-left: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  padding: 0 8px;
+}
+
+.jse-menu > a.jse-download:hover {
+  background-color: #5f9dff;
 }
