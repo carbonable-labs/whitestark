@@ -5,21 +5,21 @@ const starknet = require("starknet");
 import {Grant} from "../Types";
 
 export const merkletree = {
- async getNextLevel(level: (string | number)[]) {
+ getNextLevel(level: (string | number)[]) {
     const nextLevel = [];
     for (let i = 0; i < level.length; i += 2) {
       let node;
       if (Number(level[i]) <= Number(level[i + 1])) {
-        node = await this.hashFn([level[i], level[i + 1]]);
+        node = this.hashFn([level[i], level[i + 1]]);
       } else {
-        node = await this.hashFn([level[i + 1], level[i]]);
+        node = this.hashFn([level[i + 1], level[i]]);
       }
       nextLevel.push(node);
     }
     return nextLevel;
   },
 
-  async generateProofHelper(level: (string | number)[], index: number, proof: (string | number)[]) : Promise<(string | number)[]> {
+  generateProofHelper(level: (string | number)[], index: number, proof: (string | number)[]) : (string | number)[] {
     if (level.length === 1) {
       return proof;
     }
@@ -39,64 +39,63 @@ export const merkletree = {
       }
     }
 
-    const nextLevel = await this.getNextLevel(level);
-    return await this.generateProofHelper(nextLevel, indexParent, proof);
+    const nextLevel = this.getNextLevel(level);
+    return this.generateProofHelper(nextLevel, indexParent, proof);
   },
 
-  async generateMerkleProof(values: (string | number)[], index: number) {
-    return await this.generateProofHelper(values, index, []);
+  generateMerkleProof(values: (string | number)[], index: number) {
+    return this.generateProofHelper(values, index, []);
   },
 
-  async generateMerkleRoot(values: (string | number)[]) : Promise<string | number>{
+  generateMerkleRoot(values: (string | number)[]) : string | number{
     if (values.length === 1) {
       return values[0];
     }
     if (values.length % 2) {
       values.push(0);
     }
-    const nextLevel = await this.getNextLevel(values);
-    return await this.generateMerkleRoot(nextLevel);
+    const nextLevel = this.getNextLevel(values);
+    return this.generateMerkleRoot(nextLevel);
   },
 
-  async verifyMerkleProof(leaf: string, proof: (string | number)[], root: string | number) {
+  verifyMerkleProof(leaf: string, proof: (string | number)[], root: string | number) {
     let curr = leaf;
 
     for (const proof_elem of proof) {
       if (Number(curr) <= Number(proof_elem)) {
-        curr = await this.hashFn([curr, proof_elem]);
+        curr = this.hashFn([curr, proof_elem]);
       } else {
-        curr =await this.hashFn([proof_elem, curr]);
+        curr =this.hashFn([proof_elem, curr]);
       }
     }
 
     return curr === root;
   },
 
-  async getLeaf(address : string, allocation: number) {
-    return await this.hashFn([address, allocation]);
+  getLeaf(address : string, allocation: number) {
+    return this.hashFn([address, allocation]);
   },
 
-  async getLeaves(data : Grant[]) {
-    const values = [];
-    for (const row of data) {
-      const address = await this.hexToBn(row.address);
-      const leaf = await this.getLeaf(address, row.allocation);
+  getLeaves(data : Grant[]) {
+    const values = data.map((leave: Grant) => {
+      const address = this.hexToBn(leave.address);
+      const leaf = this.getLeaf(address, leave.allocation);
 
-      values.push({
+      return {
         leaf: leaf,
         address_bn: address,
-        address: row.address,
-        allocation: row.allocation,
+        address: leave.address,
+        allocation: leave.allocation,
         index: 0,
         proof: [0, ""]
-      });
-    }
+      }
+    });
 
     if (values.length % 2) {
       values.push({
         leaf: 0,
         address_bn: 0,
-        address: 0,
+        address: "0",
         allocation: 0,
         index: 0,
         proof: [0, ""]
@@ -106,12 +105,12 @@ export const merkletree = {
     return values;
   },
 
-  async hexToBn(hex: string) {
+  hexToBn(hex: string) {
     const bn = starknet.number.toBN(hex.replace("0x", ""), 16);
     return bn.toString();
   },
 
-  async hashFn(inputs : [any, any]) {
+  hashFn(inputs : [any, any]) {
     return this.hexToBn(starknet.hash.pedersen(inputs));
   },
 };

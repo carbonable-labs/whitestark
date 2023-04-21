@@ -18,7 +18,7 @@ describe("Whitelist", () => {
             },
         ];
 
-        const result = await whitelist.run(data);
+        const result = whitelist.run(data);
 
         expect(result.root).toEqual(
             "3360113208160104531126311151413775021287568672669734343931496313109553562643"
@@ -45,7 +45,7 @@ describe("Whitelist", () => {
             expect(() => whitelist.assert(false)).toThrow("Verification failed");
         });
 
-        it("should compute big merkle trees under 1s", async() => {
+        it("should compute big merkle trees under 1s", () => {
             const data = Array(10).fill({
                 address:
                     "0x009d02bAA050B9e8F3eb98fF0FA1eDe8e1b20D65CEae9f05E018b4d8dA3E4b7f",
@@ -53,7 +53,7 @@ describe("Whitelist", () => {
             })
 
             const preDate = Date.now();
-            await whitelist.run(data);
+            whitelist.run(data);
             const newDate = Date.now();
 
             expect(1000).toBeGreaterThan(newDate - preDate);

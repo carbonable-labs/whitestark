@@ -8,20 +8,20 @@ export const whitelist = {
     }
   },
 
-  async run(data: Grant[]) {
-    const leaves = await merkletree.getLeaves(data);
-    const root = await merkletree.generateMerkleRoot(leaves.map((item: leaveType) => item.leaf));
+  run(data: Grant[]) {
+    const leaves = merkletree.getLeaves(data);
+    const root = merkletree.generateMerkleRoot(leaves.map((item: leaveType) => item.leaf));
     if (leaves[leaves.length - 1].leaf === 0) {
       leaves.pop();
     }
     for (const [index, item] of leaves.entries()) {
       item.index = index;
-      item.proof = await merkletree.generateMerkleProof(
+      item.proof = merkletree.generateMerkleProof(
         leaves.map((element: leaveType) => element.leaf),
         index
       );
       whitelist.assert(
-        await merkletree.verifyMerkleProof(item.leaf, item.proof, root)
+        merkletree.verifyMerkleProof(item.leaf, item.proof, root)
       );
     }
     return {root: root, leaves: leaves };

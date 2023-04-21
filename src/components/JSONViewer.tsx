@@ -44,7 +44,7 @@ export default function JsonViewer(props: Props) {
       console.log(right);
       right?.classList.add("editor-container-computing");
       const jsonObject = props.value;
-      const data = await backend.run(jsonObject);
+      const data = backend.run(jsonObject);
 
       const newData = {
         text: undefined,
