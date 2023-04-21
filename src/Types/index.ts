@@ -1,10 +1,12 @@
-export type leaveType = {
-  leaf: string | number;
-  address_bn: string | number;
-  address: string | number;
+import { BigNumberish } from "starknet/utils/number";
+
+export type Leaf = {
+  leaf: BigNumberish;
+  address_bn: BigNumberish;
+  address: BigNumberish;
   allocation: number;
   index: number;
-  proof: (string | number)[];
+  proof: BigNumberish[];
 };
 
 export type Grant = {
@@ -13,6 +15,6 @@ export type Grant = {
 };
 
 export type MerkleTree = {
-  root: string | number;
-  leaves: leaveType[];
+  root: BigNumberish;
+  leaves: Leaf[];
 };

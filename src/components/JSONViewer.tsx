@@ -1,6 +1,6 @@
-import { JSONContent, JSONEditor } from "vanilla-jsoneditor";
+import { JSONContent, JSONEditor, JSONValue } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
-import { MerkleTree } from "../Types";
+import { MerkleTree } from "../types";
 
 const downloadButton = require("../images/download.png");
 
@@ -36,8 +36,7 @@ export default function JsonViewer(props: Props) {
 
   const update = () => {
     const right = document.getElementById("jsoneditor-right");
-    refEditor.current?.update({ json: props.value });
-    console.log(Date.now());
+    refEditor.current?.update({ json: props.value as JSONValue });
     right?.classList.remove("editor-container-computing");
   };
 
@@ -79,7 +78,6 @@ export default function JsonViewer(props: Props) {
 
   // add buttons to menu
   function addDownloadButton() {
-    console.log("add btn");
     setTimeout(() => {
       const jsonEditorMenu = document.querySelectorAll(".jse-menu")[1];
       const jsonMenuSearch = jsonEditorMenu?.querySelector(".jse-search");

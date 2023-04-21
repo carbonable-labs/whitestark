@@ -1,14 +1,14 @@
 import JsonEditor from "./components/JSONEditor";
 import JsonViewer from "./components/JSONViewer";
-import { whitelist } from "./merkletree/whitelist";
-import { Grant, MerkleTree } from "./Types";
+import { merkletree } from "./merkletree/merkletree";
+import { Grant, MerkleTree } from "./types";
 
 import { useEffect, useState } from "react";
 import "./styles/styles.css";
 
 export default function App() {
   const [value, setValue] = useState<Grant[]>(initialJson);
-  const [merkletree, setMerkletree] = useState<MerkleTree>(defaultMerkleTree);
+  const [merkleTree, setMerkleTree] = useState<MerkleTree>(defaultMerkleTree);
 
   // compute a new merkle tree when value change
   useEffect(() => {
@@ -16,8 +16,8 @@ export default function App() {
 
     try {
       right?.classList.add("editor-container-computing");
-      const data: MerkleTree = whitelist.run(value);
-      setMerkletree(data);
+      const data: MerkleTree = merkletree.generateMerkleTree(value);
+      setMerkleTree(data);
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +30,7 @@ export default function App() {
       </div>
 
       <div className="editor-container" id="jsoneditor-right">
-        <JsonViewer value={merkletree} />
+        <JsonViewer value={merkleTree} />
       </div>
     </div>
   );
