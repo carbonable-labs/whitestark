@@ -1,10 +1,12 @@
 import { JSONContent, JSONEditor, JSONValue } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
+import classNames from "classnames";
 import { MerkleTree } from "../types";
 
 const downloadButton = require("../images/download.png");
 
 interface Props {
+  loading: boolean;
   value: MerkleTree;
 }
 
@@ -85,5 +87,12 @@ export default function JsonViewer(props: Props) {
     }, 1);
   }
 
-  return <div className="vanilla-jsoneditor-react" ref={refContainer}></div>;
+  return (
+    <div
+      className={classNames("vanilla-jsoneditor-react", {
+        "vanilla-jsoneditor-react-loading": props.loading,
+      })}
+      ref={refContainer}
+    />
+  );
 }

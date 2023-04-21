@@ -50,14 +50,15 @@ export default function JsonEditor(props: Props) {
     componentChange: Props["onChange"]
   ) {
     // check if content is formatted
-    if (isJsonString(libraryChange.text)) {
+    if (isValidJson(libraryChange.text)) {
       componentChange(JSON.parse(libraryChange.text));
     }
   }
 
-  function isJsonString(str: string) {
+  function isValidJson(str: string) {
     try {
-      JSON.parse(str);
+      const json = JSON.parse(str);
+      return typeof json === "object" && !!json.length;
     } catch (e) {
       return false;
     }

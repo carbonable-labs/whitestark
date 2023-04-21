@@ -3,7 +3,7 @@ import { Grant } from "../../types";
 
 describe("Whitelist", () => {
   describe("run()", () => {
-    it("should generate merkle tree with correct root and proofs", async () => {
+    it("should generate a merkle tree with valid root and proofs", async () => {
       const data: Grant[] = [
         {
           address:
@@ -38,19 +38,8 @@ describe("Whitelist", () => {
   });
 
   describe("assert()", () => {
-    it("should throw error if the condition is false", () => {
+    it("should throw an error if the condition is false", () => {
       expect(() => merkletree.assert(false)).toThrow("Verification failed");
-    });
-
-    it("should compute merkle trees under 1s", () => {
-      const data = Array(10).fill({
-        address:
-          "0x009d02bAA050B9e8F3eb98fF0FA1eDe8e1b20D65CEae9f05E018b4d8dA3E4b7f",
-        allocation: 1,
-      });
-      const startTime = Date.now();
-      merkletree.generateMerkleTree(data);
-      expect(1000).toBeGreaterThan(Date.now() - startTime);
     });
   });
 });

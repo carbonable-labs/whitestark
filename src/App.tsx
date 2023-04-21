@@ -1,26 +1,47 @@
+import { useEffect, useState } from "react";
 import JsonEditor from "./components/JSONEditor";
 import JsonViewer from "./components/JSONViewer";
 import { merkletree } from "./merkletree/merkletree";
 import { Grant, MerkleTree } from "./types";
 
-import { useEffect, useState } from "react";
 import "./styles/styles.css";
 
 export default function App() {
   const [value, setValue] = useState<Grant[]>(initialJson);
+  const [isComputing, setIsComputing] = useState<boolean>(false);
   const [merkleTree, setMerkleTree] = useState<MerkleTree>(defaultMerkleTree);
 
-  // compute a new merkle tree when value change
+  // compute a new merkle tree on value change
   useEffect(() => {
-    const right = document.getElementById("jsoneditor-right");
-
-    try {
-      right?.classList.add("editor-container-computing");
-      const data: MerkleTree = merkletree.generateMerkleTree(value);
-      setMerkleTree(data);
-    } catch (error) {
-      console.log(error);
+    // mark the state as computing
+    setIsComputing(true);
+    // create a worker to offload the tree computation
+    const worker = new Worker(
+      new URL("./workers/merkle-worker.ts", import.meta.url)
+    );
+    // send the new value to the worker
+    if (window.Worker) {
+      worker.postMessage(value);
+      // update the merkle tree and mark the state as done computing on worker response
+      worker.onmessage = ({ data }) => {
+        console.log("received response from worker!");
+        setMerkleTree(data);
+        setIsComputing(false);
+      };
+    } else {
+      // execute the merkle tree computation on the main thread if the browser does not provide web workers
+      console.warn(
+        "this browser does not provide web workers, computation might freeze the UI"
+      );
+      const newMerkleTree = merkletree.generateMerkleTree(value);
+      setMerkleTree(newMerkleTree);
+      setIsComputing(false);
     }
+
+    // terminate the worker on cleanup - this prevents a previous iteration of the
+    return () => {
+      worker.terminate();
+    };
   }, [value]);
 
   return (
@@ -30,7 +51,7 @@ export default function App() {
       </div>
 
       <div className="editor-container" id="jsoneditor-right">
-        <JsonViewer value={merkleTree} />
+        <JsonViewer loading={isComputing} value={merkleTree} />
       </div>
     </div>
   );

@@ -21,8 +21,8 @@ body {
   width: 100%;
 }
 
-#jsoneditor-right.editor-container-computing {
-  filter: blur(2px);
+.vanilla-jsoneditor-react-loading {
+  filter: blur(4px);
 }
 
 .jse-menu > a.jse-download {
