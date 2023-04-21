@@ -3,7 +3,7 @@
 const starknet = require("starknet");
 import { BigNumberish } from "starknet/utils/number";
 
-import { Grant, MerkleTree, Leaf } from "../ypes";
+import { Grant, MerkleTree, Leaf } from "../types";
 
 export const merkletree = {
   assert(condition: boolean, message?: string) {

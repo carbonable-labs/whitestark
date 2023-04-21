@@ -1,6 +1,6 @@
 import { JSONContent, JSONEditor, JSONValue } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
-import { MerkleTree } from "../ypes";
+import { MerkleTree } from "../types";
 
 const downloadButton = require("../images/download.png");
 
