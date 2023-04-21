@@ -1,6 +1,6 @@
 import { Content, JSONEditor, Mode, TextContent } from "vanilla-jsoneditor";
 import { useEffect, useRef } from "react";
-import { Grant } from "../types";
+import { Grant } from "../ypes";
 
 interface Props {
   value: Grant[];

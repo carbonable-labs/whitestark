@@ -1,7 +1,7 @@
 import JsonEditor from "./components/JSONEditor";
 import JsonViewer from "./components/JSONViewer";
 import { merkletree } from "./merkletree/merkletree";
-import { Grant, MerkleTree } from "./types";
+import { Grant, MerkleTree } from "./ypes";
 
 import { useEffect, useState } from "react";
 import "./styles/styles.css";

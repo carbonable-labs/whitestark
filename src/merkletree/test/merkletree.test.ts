@@ -1,5 +1,5 @@
 import { merkletree } from "../merkletree";
-import { Grant } from "../../types";
+import { Grant } from "../../ypes";
 
 describe("Whitelist", () => {
   describe("run()", () => {
