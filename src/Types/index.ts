@@ -7,11 +7,7 @@ export type leaveType = {
   proof: (string | number)[];
 };
 
-export type dataItem = {
+export type Grant = {
   address: string;
   allocation: number;
 };
-
-export type dataType = dataItem[];
-
-export type Grant = { address: string; allocation: number };

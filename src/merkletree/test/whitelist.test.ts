@@ -1,11 +1,11 @@
 import { whitelist } from "../whitelist";
-import { dataType } from "../../Types";
+import { Grant } from "../../Types";
 
 describe("Whitelist", () => {
 
     describe("run()", () => {
         it("should generate merkle tree with correct root and proofs", async() => {
-        const data: dataType =  [
+        const data: Grant[] =  [
             {
             address:
                 "0x208555013ffe57ce0f78be91ce8b368eba6645a52bb90fed2c427617d619d03",
@@ -44,6 +44,20 @@ describe("Whitelist", () => {
         it("should throw error if the condition is false", () => {
             expect(() => whitelist.assert(false)).toThrow("Verification failed");
         });
+
+        it("should compute big merkle trees under 1s", async() => {
+            const data = Array(10).fill({
+                address:
+                    "0x009d02bAA050B9e8F3eb98fF0FA1eDe8e1b20D65CEae9f05E018b4d8dA3E4b7f",
+                allocation: 1,
+            })
+
+            const preDate = Date.now();
+            await whitelist.run(data);
+            const newDate = Date.now();
+
+            expect(1000).toBeGreaterThan(newDate - preDate);
+        })
     })
 
 });

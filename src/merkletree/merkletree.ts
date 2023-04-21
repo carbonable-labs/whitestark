@@ -2,7 +2,7 @@
 
 const starknet = require("starknet");
 
-import {dataType} from "../Types";
+import {Grant} from "../Types";
 
 export const merkletree = {
  async getNextLevel(level: (string | number)[]) {
@@ -76,7 +76,7 @@ export const merkletree = {
     return await this.hashFn([address, allocation]);
   },
 
-  async getLeaves(data : dataType) {
+  async getLeaves(data : Grant[]) {
     const values = [];
     for (const row of data) {
       const address = await this.hexToBn(row.address);

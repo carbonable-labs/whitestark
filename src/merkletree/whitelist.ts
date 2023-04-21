@@ -1,6 +1,5 @@
-import { merkletree } from "./merkle";
-import { dataType, leaveType } from "../Types";
-import keccak256 from "keccak256";
+import { merkletree } from "./merkletree";
+import { Grant, leaveType } from "../Types";
 
 export const whitelist = {
   assert(condition: boolean, message?: string) {
@@ -9,24 +8,22 @@ export const whitelist = {
     }
   },
 
-  async run(data: dataType) {
+  async run(data: Grant[]) {
     const leaves = await merkletree.getLeaves(data);
-    const merkle = (await merkletree.generateMerkleRoot(leaves.map((item: leaveType) => item.leaf)));
-    const root = merkle.getHexRoot();
+    const root = await merkletree.generateMerkleRoot(leaves.map((item: leaveType) => item.leaf));
     if (leaves[leaves.length - 1].leaf === 0) {
       leaves.pop();
     }
     for (const [index, item] of leaves.entries()) {
       item.index = index;
       item.proof = await merkletree.generateMerkleProof(
-        merkle,
-        item.leaf
+        leaves.map((element: leaveType) => element.leaf),
+        index
       );
-      console.log(
-        item.proof,
-        await merkletree.verifyMerkleProof(merkle, item.leaf, merkle.getProof(keccak256(item.leaf)))
+      whitelist.assert(
+        await merkletree.verifyMerkleProof(item.leaf, item.proof, root)
       );
     }
-    return { root: root, leaves: leaves};
+    return {root: root, leaves: leaves };
   },
 };
