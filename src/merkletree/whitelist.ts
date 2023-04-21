@@ -1,5 +1,5 @@
 import { merkletree } from "./merkletree";
-import { Grant, leaveType } from "../Types";
+import { Grant, MerkleTree, leaveType } from "../Types";
 
 export const whitelist = {
   assert(condition: boolean, message?: string) {
@@ -8,7 +8,7 @@ export const whitelist = {
     }
   },
 
-  run(data: Grant[]) {
+  run(data: Grant[]) : MerkleTree {
     const leaves = merkletree.getLeaves(data);
     const root = merkletree.generateMerkleRoot(leaves.map((item: leaveType) => item.leaf));
     if (leaves[leaves.length - 1].leaf === 0) {

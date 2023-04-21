@@ -21,7 +21,7 @@ body {
   width: 100%;
 }
 
-#jse-editor.editor-container-computing {
+#jsoneditor-right.editor-container-computing {
   filter: blur(2px);
 }
 

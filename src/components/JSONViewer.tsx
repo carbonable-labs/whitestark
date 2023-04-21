@@ -1,12 +1,11 @@
 import { JSONContent, JSONEditor } from "vanilla-jsoneditor";
-import { useEffect, useRef, useCallback } from "react";
-import { Grant } from "../Types";
+import { useEffect, useRef } from "react";
+import { MerkleTree } from "../Types";
 
-import { whitelist } from "../merkletree/whitelist";
 const downloadButton = require("../images/download.png");
 
 interface Props {
-  value: Grant[];
+  value: MerkleTree;
 }
 
 /**
@@ -35,28 +34,12 @@ export default function JsonViewer(props: Props) {
     };
   }, []);
 
-  const right = document.getElementById("jsoneditor-right");
-
-  const backend = whitelist;
-
-  const update = useCallback(async () => {
-    try {
-      console.log(right);
-      right?.classList.add("editor-container-computing");
-      const jsonObject = props.value;
-      const data = backend.run(jsonObject);
-
-      const newData = {
-        text: undefined,
-        json: data,
-      };
-      refEditor.current?.update(newData);
-
-      right?.classList.remove("editor-container-computing");
-    } catch (error) {
-      console.log(error);
-    }
-  }, [props.value]);
+  const update = () => {
+    const right = document.getElementById("jsoneditor-right");
+    refEditor.current?.update({ json: props.value });
+    console.log(Date.now());
+    right?.classList.remove("editor-container-computing");
+  };
 
   // update props
   useEffect(() => {
@@ -67,7 +50,7 @@ export default function JsonViewer(props: Props) {
     }
 
     update();
-  }, [props]);
+  }, [props.value]);
 
   useEffect(() => {
     addDownloadButton();

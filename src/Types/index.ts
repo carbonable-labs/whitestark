@@ -11,3 +11,8 @@ export type Grant = {
   address: string;
   allocation: number;
 };
+
+export type MerkleTree = {
+  root: string | number;
+  leaves: leaveType[];
+};
