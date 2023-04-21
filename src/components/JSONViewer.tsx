@@ -16,13 +16,13 @@ interface Props {
  */
 
 export default function JsonViewer(props: Props) {
-  const refContainer = useRef<HTMLDivElement>(null);
+  const refContainer = useRef<any>(null);
   const refEditor = useRef<JSONEditor | null>(null);
 
   useEffect(() => {
     // create editor
     refEditor.current = new JSONEditor({
-      target: refContainer.current as Element,
+      target: refContainer.current,
       props: {},
     });
 
