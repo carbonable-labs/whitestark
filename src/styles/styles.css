@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+}
+
+.hompe-page {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+
+.vanilla-jsoneditor-react {
+  width: 100%;
+  height: 100%;
+}
+
+.jse-group-button {
+  display: none;
+}
+
+.editor-container {
+  width: 100%;
+}
+
+.vanilla-jsoneditor-react-loading {
+  filter: blur(4px);
+}
+
+.jse-menu > a.jse-download {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  padding: 0 8px;
+}
+
+.jse-menu > a.jse-download:hover {
+  background-color: #5f9dff;
+}
